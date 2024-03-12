@@ -4,29 +4,30 @@ class Solution:
         Do not return anything, modify matrix in-place instead.
         """
         ROWS, COLS = len(matrix), len(matrix[0])
-        row = [1] * ROWS
-        col = [1] * COLS
-
-        def setRowZero(r,c):
-            for c in range(COLS):
-                matrix[r][c] = 0
-        
-        def setColZero(r,c):
-            for r in range(ROWS):
-                matrix[r][c] = 0
+        rowZero = False
     
         for r in range(ROWS):
             for c in range(COLS):
                 if matrix[r][c] == 0:
-                    row[r] = 0
-                    col[c] = 0
+                    matrix[0][c] = 0
+                    if r > 0:
+                        matrix[r][0] = 0
+                    else:
+                        rowZero = True
 
-        for r in range(len(row)):
-            if row[r] == 0:
-                setRowZero(r,c)
+        for r in range(1, ROWS):
+            for c in range(1, COLS):
+                if matrix[r][0] == 0 or matrix[0][c] == 0:
+                    matrix[r][c] = 0
 
-        for c in range(len(col)):
-            if col[c] == 0:
-                setColZero(r,c)
+        if matrix[0][0] == 0:
+            for r in range(ROWS):
+                matrix[r][0] = 0
+
+        if rowZero:
+            for c in range(COLS):
+                matrix[0][c] = 0
+            
+
 
         
