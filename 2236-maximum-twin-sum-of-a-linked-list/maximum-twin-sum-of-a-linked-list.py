@@ -5,22 +5,21 @@
 #         self.next = next
 class Solution:
     def pairSum(self, head: Optional[ListNode]) -> int:
-        hashMap = {}
-        i = 0
+        slow, fast = head, head
+        prev = None
         res = 0
-        cur = head
 
-        while cur:
-            hashMap[i] = cur.val
-            cur = cur.next
-            i += 1
+        while fast and fast.next:
+            fast = fast.next.next
+            # Reverse the fist half of LL
+            tmp = slow.next
+            slow.next = prev
+            prev = slow
+            slow = tmp
 
-        for i in range(len(hashMap)):
-            res = max(res, hashMap[i] + hashMap[len(hashMap)-1-i])
+        while slow:
+            res = max(res, prev.val + slow.val)
+            prev = prev.next
+            slow = slow.next
 
         return res
-
-        
-
-
-        
