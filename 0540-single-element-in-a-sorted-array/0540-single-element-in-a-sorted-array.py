@@ -1,15 +1,20 @@
 class Solution:
     def singleNonDuplicate(self, nums: List[int]) -> int:
-        count_map = {}
+        l, r = 0, len(nums) - 1
         
-        for num in nums:
-            if num in count_map:
-                count_map[num] += 1
-            else:
-                count_map[num] = 1
+        while l <= r:
+            m = l + ((r-l)//2)
+            
+            if ((m-1 < 0 or nums[m-1] != nums[m]) and 
+                (m+1 == len(nums) or nums[m] != nums[m+1])):
+                return nums[m]
                 
-        for num, count in count_map.items():
-            if count == 1:
-                return num
+            leftSize = m - 1 if nums[m-1] == nums[m] else m
+            if leftSize % 2:
+                r = m - 1
+            else:
+                l = m + 1
+            
+            
             
         
