@@ -1,12 +1,19 @@
 class Solution:
     def topKFrequent(self, nums: List[int], k: int) -> List[int]:
-        count_map = {}
-        for n in nums:
-            count_map[n] = 1 + count_map.get(n, 0)
-            
-        freq_items = list(count_map.items())
-        freq_items.sort(key=lambda x:x[1], reverse=True)
+        # TC - O(n)
+        # Bucket 
+        count = {}
+        freq = [[] for _ in range(len(nums)+1) ]
         
-        result = [item[0] for item in freq_items[:k]]
+        for n in nums:
+            count[n] = 1 + count.get(n, 0)
+        for n, c in count.items():
+            freq[c].append(n)
             
-        return result 
+        result = []
+        for i in range(len(freq)-1, 0, -1 ):
+            for n in freq[i]:
+                result.append(n)
+                if len(result) == k:
+                    return result
+    
