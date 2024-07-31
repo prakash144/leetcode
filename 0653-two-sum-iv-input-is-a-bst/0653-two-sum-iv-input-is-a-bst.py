@@ -6,23 +6,14 @@
 #         self.right = right
 class Solution:
     def findTarget(self, root: Optional[TreeNode], k: int) -> bool:
-        self.list = []
-        def in_order_traversal(node):
+        def find(node):
             if not node:
-                return
-            in_order_traversal(node.left)
-            self.list.append(node.val)
-            in_order_traversal(node.right)
-    
-        in_order_traversal(root)
-        left, right = 0, len(self.list) - 1
-        while left < right:
-            current_sum = self.list[left] + self.list[right]
-            if current_sum == k:
+                return False
+            if k - node.val in self.seen:
                 return True
-            elif current_sum < k:
-                left += 1
-            else:
-                right -= 1
+            self.seen.add(node.val)
+            return find(node.left) or find(node.right)
         
-        return False
+        self.seen = set()
+        return find(root)
+        
