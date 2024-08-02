@@ -1,23 +1,23 @@
 class Solution:
     def checkValidString(self, s: str) -> bool:
-        min_open = 0
-        max_open = 0
-        
-        for char in s:
+        left_stack = []
+        star_stack = []
+
+        for i, char in enumerate(s):
             if char == '(':
-                min_open += 1
-                max_open += 1
-            elif char == ')':
-                min_open -= 1
-                max_open -= 1
+                left_stack.append(i)
             elif char == '*':
-                min_open -= 1
-                max_open += 1
-            
-            if max_open < 0:
+                star_stack.append(i)
+            elif char == ')':
+                if left_stack:
+                    left_stack.pop()
+                elif star_stack:
+                    star_stack.pop()
+                else:
+                    return False
+
+        while left_stack and star_stack:
+            if left_stack.pop() > star_stack.pop():
                 return False
-            
-            if min_open < 0:
-                min_open = 0
-        
-        return min_open == 0
+
+        return not left_stack
