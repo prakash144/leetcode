@@ -3,20 +3,18 @@ class Solution:
         positive = deque()
         negative = deque()
         
-        result = []
-        
+        # Separate positive and negative numbers
         for n in nums:
             if n < 0:
                 negative.append(n)
             else:
                 positive.append(n)
-            
-        for i in range(len(nums)):
-            if i % 2:
-                result.append(negative.popleft())
-            else:
-                result.append(positive.popleft())
-                
+        
+        # Alternate between positive and negative for the result
+        result = []
+        for _ in range(len(nums) // 2):
+            result.append(positive.popleft())
+            result.append(negative.popleft())
         
         return result
         
