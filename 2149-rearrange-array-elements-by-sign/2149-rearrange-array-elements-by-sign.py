@@ -1,20 +1,13 @@
 class Solution:
     def rearrangeArray(self, nums: List[int]) -> List[int]:
-        positive = deque()
-        negative = deque()
         
-        # Separate positive and negative numbers
-        for n in nums:
-            if n < 0:
-                negative.append(n)
-            else:
-                positive.append(n)
+        positive = [n for n in nums if n > 0]
+        negative = [n for n in nums if n < 0]
         
-        # Alternate between positive and negative for the result
         result = []
-        for _ in range(len(nums) // 2):
-            result.append(positive.popleft())
-            result.append(negative.popleft())
+        for p, n in zip(positive, negative):
+            result.append(p)
+            result.append(n)
         
         return result
         
