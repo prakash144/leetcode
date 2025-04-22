@@ -4,39 +4,36 @@
 #         self.val = val
 #         self.next = next
 class Solution:
-    def mergeKLists(self, lists: List[Optional[ListNode]]) -> Optional[ListNode]:
-        if not lists or len(lists) == 0:
+    def mergeTwoLists(self, list1, list2):
+        if not list1:
+            return list2
+        if not list2:
+            return list1
+
+        if list1.val <= list2.val:
+            list1.next = self.mergeTwoLists(list1.next, list2)
+            return list1
+        else:
+            list2.next = self.mergeTwoLists(list2.next, list1)
+            return list2    
+
+    def partitionAndMerge(self, start, end, lists):
+        if start > end:
             return None
-        
-        while len(lists) > 1:
-            mergedList = []
-            for i in range(0, len(lists), 2):
-                l1 = lists[i]
-                l2 = lists[i+1] if (i+1) < len(lists) else None
-                mergedList.append(self.meregList(l1, l2))
-            lists = mergedList
-            
-        return lists[0]
-        
-    def meregList(self, l1, l2):
-        dummyNode = ListNode()
-        tail = dummyNode
-        
-        while l1 and l2:
-            if l1.val < l2.val:
-                tail.next = l1
-                l1 = l1.next
-            else:
-                tail.next = l2
-                l2 = l2.next
-            tail = tail.next
-        if l1:
-            tail.next = l1
-        if l2:
-            tail.next = l2
-            
-        return dummyNode.next
-            
-                    
-                                  
-            
+
+        if start == end:
+            return lists[start]
+
+        mid = start + (end - start) // 2
+        L1 = self.partitionAndMerge(start, mid, lists)
+        L2 = self.partitionAndMerge(mid + 1, end, lists)
+        return self.mergeTwoLists(L1, L2)
+    
+    # START 
+    def mergeKLists(self, lists: List[Optional[ListNode]]) -> Optional[ListNode]:
+        n = len(lists)
+
+        if n == 0:
+            return None
+
+        return self.partitionAndMerge(0, n - 1, lists)
