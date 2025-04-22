@@ -1,28 +1,21 @@
-class Solution(object):
-    def isValidSudoku(self, board):
-        def is_valid_block(block):
-            block = [num for num in block if num != '.']
-            return len(block) == len(set(block))
+class Solution:
+    def isValidSudoku(self, board: List[List[str]]) -> bool:
         
-        # Check rows
-        for row in board:
-            if not is_valid_block(row):
-                return False
+        # OPTIMAL WAY 
+        cols = collections.defaultdict(set)
+        rows = collections.defaultdict(set)
+        boxes = collections.defaultdict(set) # key = (r / 3, c / 3)
 
-        # Check columns
-        for col in zip(*board):
-            if not is_valid_block(col):
-                return False
-
-        # Check 3x3 sub-grids
-        for i in range(0, 9, 3):
-            for j in range(0, 9, 3):
-                subgrid = [
-                    board[x][y]
-                    for x in range(i, i+3)
-                    for y in range(j, j+3)
-                ]
-                if not is_valid_block(subgrid): 
+        for r in range(9):
+            for c in range(9):
+                if board[r][c] == ".":
+                    continue
+                if (board[r][c] in cols[c] or
+                    board[r][c] in rows[r] or
+                    board[r][c] in boxes[(r // 3, c // 3)]):
                     return False
+                cols[c].add(board[r][c])
+                rows[r].add(board[r][c])
+                boxes[(r // 3, c // 3)].add(board[r][c])
 
         return True
