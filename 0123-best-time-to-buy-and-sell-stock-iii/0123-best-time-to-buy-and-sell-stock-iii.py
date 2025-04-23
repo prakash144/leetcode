@@ -1,16 +1,19 @@
 class Solution:
     def maxProfit(self, prices: List[int]) -> int:
+        # Space Optimization: O(n), O(1)
         n = len(prices)
-        if n == 0:
-            return 0
+        ahead = [[0]*3 for _ in range(2)]  # ahead[buy][cap]
 
-         # DP table: dp[i][j] - max profit with i transactions on day j
-        dp = [[0] * n for _ in range(3)]
-        
-        for i in range(1, 3):
-            maxDiff = -prices[0]  # Max difference of previous profit and buying price
-            for j in range(1, n):
-                dp[i][j] = max(dp[i][j - 1], prices[j] + maxDiff)
-                maxDiff = max(maxDiff, dp[i - 1][j] - prices[j])
+        for i in range(n-1, -1, -1):
+            curr = [[0]*3 for _ in range(2)]
+            for buy in range(2):
+                for cap in range(1, 3):
+                    if buy:
+                        curr[buy][cap] = max(-prices[i] + ahead[0][cap],
+                                            ahead[1][cap])
+                    else:
+                        curr[buy][cap] = max(prices[i] + ahead[1][cap-1],
+                                            ahead[0][cap])
+            ahead = curr
 
-        return dp[2][n - 1]
+        return ahead[1][2]
